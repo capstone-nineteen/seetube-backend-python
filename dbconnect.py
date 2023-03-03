@@ -4,7 +4,7 @@ import json
 #DB연결
 conn = pymysql.connect( 
     user='root',
-    password='449966',
+    password='password',
     host='localhost',
     db='testdb',
     charset='utf8',

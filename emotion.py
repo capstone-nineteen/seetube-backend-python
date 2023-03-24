@@ -1,21 +1,22 @@
 import pymysql
 import json
+from collections import Counter
 
 #DB연결
 conn = pymysql.connect( 
     user='root',
     password='password',
-    host='localhost',
-    db='testdb',
+    host='host',
+    db='seetube',
     charset='utf8',
     cursorclass=pymysql.cursors.DictCursor)
 
 
-
-sceneTime = [0, 4, 14, 20, 22, 30] #장면 시작하는 시간을 저장하는 리스트
+videoId = 4
+sceneTime = [0, 4, 10, 15, 18, 20] #장면 시작하는 시간을 저장하는 리스트
 emotionSceneAll = [] #모든 리뷰어의 장면별 시간, 해당 장면에서 느낀 감정, 감정 비율을 저장하는 리스트
 
-sql = "SELECT * FROM testdb.watchinginfo"
+sql = "SELECT * FROM seetube.watchingInfos WHERE videoId = {}".format(videoId)
 
 
 with conn:
@@ -25,7 +26,7 @@ with conn:
 
         l = 0
         while l < len(output):
-            result = json.loads(output[l]['watchingInfo']) #json 데이터를 다시 한 번 딕셔너리로 변환
+            result = json.loads(output[l]['watchingInfos']) #json 데이터를 다시 한 번 딕셔너리로 변환
                 
             
             c = 0
@@ -39,8 +40,8 @@ with conn:
                         while i < sceneTime[c+1] :
 
 
-                            if((float)(result['watchingInfos'][i]['emotionInfo']['confidencePercentage'])> 40 or result['watchingInfos'][i]['emotionInfo']['confidencePercentage'] == 0):
-                                emotionList.append(result['watchingInfos'][i]['emotionInfo']['classification'])
+                            if((float)(result[i]['emotionInfo']['confidencePercentage'])> 40 or result[i]['emotionInfo']['confidencePercentage'] == 0):
+                                emotionList.append(result[i]['emotionInfo']['classification'])
 
 
                             i += 1
@@ -64,54 +65,47 @@ with conn:
         target_list = ['neutral', 'angry', 'happy', 'disgust', 'fear', 'sad', 'surprise', 'none']
 
 
-        emotion_result_list = []
+        emotion_list = []
 
 
-        #전체 결과에서 가장 많이 감지된 감정 단어와, 해당 감정을 느낀 감정률 (리뷰어 한명 당) 을 리스트로 저장
+        #리뷰어 한명당 해당 장면에서 가장 많이 느낀 감정을 리스트로 저장
         for lst in emotionSceneAll:
             count_dict = {t: lst[3].count(t) for t in target_list} 
             max_count = max(count_dict.values())
             max_word = [t for t, c in count_dict.items() if c == max_count][0]
-            percentage = max_count / len(lst[3])
-            emotion_result_list.append([lst[0], lst[1], lst[2], [max_word, percentage]])
+            emotion_list.append([lst[0], lst[1], lst[2], max_word])
+     
 
-
-
-        dict_lst2 = {}
+        emotion_dict = {}
 
         #모든 리뷰어들의 결과 값을 해당 장면 구간 별로 정렬해 딕셔너리로 저장
-        for sub_lst in emotion_result_list:
+        for sub_lst in emotion_list:
             key = (sub_lst[1], sub_lst[2])
-            if key in dict_lst2:
-                dict_lst2[key].append(sub_lst[3])
+            if key in emotion_dict:
+                emotion_dict[key].append(sub_lst[3])
             else:
-                dict_lst2[key] = [sub_lst[3]]
+                emotion_dict[key] = [sub_lst[3]]
 
 
+       
 
         emotion_result = [] #장면별 제일 많이 느껴진 감정, 감정률을 저장하는 최종 결과값 리스트
            
 
         #해당 장면 구간에서 가장 많이 느껴진 감정, 감정률을 계산하여 저장
-        for start, end in dict_lst2.keys():
-            words = []
-            probs = []
-            for word, prob in dict_lst2[(start, end)]:
-                words.append(word)
-                probs.append(prob)
-            
-            max_word = max(words, key=words.count)
-            max_word_count = words.count(max_word)
-            prob_sum = sum([prob for word, prob in dict_lst2[(start, end)] if word == max_word])
-            avg = prob_sum / max_word_count
-            
-            emotion_result.append((start, end, max_word, avg))
-
+        for key, value in emotion_dict.items():
+            counter = Counter(value)
+            most_common_word, most_common_count = counter.most_common(1)[0]
+            emotion_result.append((key[0], key[1], most_common_word, most_common_count / len(value)))
 
         
+        emotion_result_list = [r for r in emotion_result if r[2] != 'neutral']
+
+        
+        
         #DB에 결과값 INSERT
-        for res in emotion_result:
-            cur.execute("INSERT INTO emotion (emotionStartTime, emotionEndTime, emotion, emotionRate) VALUES (%s, %s, %s, %s)", (res[0], res[1], res[2], res[3]))
+        for res in emotion_result_list:
+            cur.execute("INSERT INTO emotions (emotionStartTime, emotionEndTime, emotion, emotionRate, videoId) VALUES (%s, %s, %s, %s, %s)", (res[0], res[1], res[2], res[3], videoId))
            
             
     conn.commit()

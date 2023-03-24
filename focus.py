@@ -5,17 +5,17 @@ import json
 conn = pymysql.connect( 
     user='root',
     password='password',
-    host='localhost',
-    db='testdb',
+    host='host',
+    db='seetube',
     charset='utf8',
     cursorclass=pymysql.cursors.DictCursor)
 
 
-
+videoId = 4
 sceneTime = [0, 4, 14, 20, 22, 30] #장면 시작하는 시간을 저장하는 리스트
 focusScene = [] #모든 리뷰어의 장면별 시간, 해당 집중도를 저장하는 리스트
 
-sql = "SELECT * FROM testdb.watchinginfo"
+sql = "SELECT * FROM seetube.watchingInfos WHERE videoId = {}".format(videoId)
 
 
 with conn:

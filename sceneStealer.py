@@ -64,8 +64,8 @@ def compute_intersect_area(rect1, boundingBox_points):
 
         
 #s3연결
-access_key = 'AKIARAMN2Z72HCN6ICFM'
-secret_key = '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'
+access_key = ''
+secret_key = ''
 bucket_name = 'seetube-videos'
 
 s3_client = boto3.client('s3', aws_access_key_id = access_key, 

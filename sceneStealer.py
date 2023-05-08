@@ -75,7 +75,7 @@ dic = []
 #DB연결
 connect = pymysql.connect( 
     user='root',
-    password='nineteen1919!',
+    password='',
     host='localhost',
     db='seetube',
     charset='utf8',

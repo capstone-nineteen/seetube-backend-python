@@ -83,15 +83,20 @@ with conn.cursor() as cur:
     os.system(cmd)
 
     file_name = f'highlight_{videoId}.mp4'
-    s3_path = 'highlight/' + file_name
+    s3_video_path = 'highlight/' + file_name
     s3_client = boto3.client('s3', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
     
-    s3_client.upload_file(file_name, bucket_name, s3_path, ExtraArgs={'ACL': 'public-read'})
+    s3_client.upload_file(file_name, bucket_name, s3_video_path, ExtraArgs={'ACL': 'public-read'})
 
+    thumbnail_url = []
     # 하이라이트 썸네일 가져오기
-    int_time = int(merged_scenes[0]['startTime'])
-    s3_thumbnail_path = 'thumbnails/' + VIDEO_NAME +'-' + str(int_time) + '.jpg'
-    thumbnail_url = f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{s3_thumbnail_path}"
+    for i in range(5):
+        int_time = int(highlight_list[i]['startTime'])
+        s3_thumbnail_path = 'thumbnails/' + VIDEO_NAME +'-' + str(int_time) + '.jpg'
+        thumbnail_url.append(f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{s3_thumbnail_path}")
+
+    # 비디오 url 가져오기
+    video_url = f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{s3_video_path}"
 
 
     query = """
@@ -100,26 +105,31 @@ with conn.cursor() as cur:
                 FirstSceneEndTimeInOriginalVideo,
                 FirstSceneStartTimeInHighlight,
                 FirstSceneEndTimeInHighlight,
+                FirstSceneThumbnail,
                 SecondSceneStartTimeInOriginalVideo,
                 SecondSceneEndTimeInOriginalVideo,
                 SecondSceneStartTimeInHighlight,
                 SecondSceneEndTimeInHighlight,
+                SecondSceneThumbnail,
                 ThirdSceneStartTimeInOriginalVideo,
                 ThirdSceneEndTimeInOriginalVideo,
                 ThirdSceneStartTimeInHighlight,
                 ThirdSceneEndTimeInHighlight,
+                ThirdSceneThumbnail,
                 FourthSceneStartTimeInOriginalVideo,
                 FourthSceneEndTimeInOriginalVideo,
                 FourthSceneStartTimeInHighlight,
                 FourthSceneEndTimeInHighlight,
+                FourthSceneThumbnail,
                 FifthSceneStartTimeInOriginalVideo,
                 FifthSceneEndTimeInOriginalVideo,
                 FifthSceneStartTimeInHighlight,
                 FifthSceneEndTimeInHighlight,
-                thumbnailURL,
+                FifthSceneThumbnail,
+                videoURL,
                 videoId
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
     
     values = (
@@ -127,23 +137,28 @@ with conn.cursor() as cur:
         highlight_list[0]['endTime'],
         merged_scenes[0]['startTime'],
         merged_scenes[0]['endTime'],
+        thumbnail_url[0],
         highlight_list[1]['startTime'],
         highlight_list[1]['endTime'],
         merged_scenes[1]['startTime'],
         merged_scenes[1]['endTime'],
+        thumbnail_url[1],
         highlight_list[2]['startTime'],
         highlight_list[2]['endTime'],
         merged_scenes[2]['startTime'],
         merged_scenes[2]['endTime'],
+        thumbnail_url[2],
         highlight_list[3]['startTime'],
         highlight_list[3]['endTime'],
         merged_scenes[3]['startTime'],
         merged_scenes[3]['endTime'],
+        thumbnail_url[3],
         highlight_list[4]['startTime'],
         highlight_list[4]['endTime'],
         merged_scenes[4]['startTime'],
         merged_scenes[4]['endTime'],
-        thumbnail_url,
+        thumbnail_url[4],
+        video_url,
         videoId
     )
 
@@ -151,4 +166,4 @@ with conn.cursor() as cur:
 
     conn.commit()
 
-    print("highlights record inserted.")
+    

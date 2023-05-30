@@ -2,12 +2,12 @@
 
 1. 장면 분할
 
-![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/6eb59677-42ac-4132-8ebb-2095853084e2)
+![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/429481eb-cb64-4602-a87a-8b37a95bafa4)
+
 
 Scene Transition Detection 라이브러리 PySceneDetect 사용
-영상을 구성하는 프레임들 중 연속된 프레임의 색상, 채도, 명도 등을 비교
-그 차이가 임계값 초과인 경우 해당 지점을 장면의 전환점으로 식별
-전환점을 기준으로 장면을 자동 분할하여 클립 영상 생성
+영상을 구성하는 프레임들 중 연속된 프레임의 색상, 채도, 명도 등을 비교. 그 차이가 임계값 초과인 경우 해당 지점을 장면의 전환점으로 식별
+전환점을 기준으로 장면을 자동 분할하여 클립 영상 생성.
 
 PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
@@ -15,11 +15,13 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/ff8edf98-585b-461b-8af6-defc34f3670d)
 
-[집중도가 높았던 장면]
+**집중도가 높았던 장면**
+
 시선 (x, y) 좌표와 동공 고정 여부 (Fixation/Saccade) 고려 영상 내부의 한 응시점에 동공이 고정된 경우 집중으로 판단 
 장면별 집중률 계산, 평균 집중률이 70%이상인 장면 선정
 
-[감정이 감지된 장면]
+**감정이 감지된 장면**
+
 장면별로 많은 사람들이 공통으로 느낀 감정과 그 비율 계산, 감정 감지율이 20%이상인 장면 선정
 
 3. 씬스틸러 선정
@@ -41,6 +43,7 @@ Yolov5 : https://github.com/ultralytics/yolov5
 
 장면별 집중률과 감정 감지율 점수화, 영상 장르와 일치하는 감정 점수에는 가중치 부여
 모든 장면을 중요도 점수를 기준으로 정렬하고 상위 5개의 장면을 합쳐 하이라이트 영상으로 재편집.
+
 ffmpeg, moviepy 라이브러리 사용. 
 
 ffmpeg: https://github.com/kkroening/ffmpeg-python

@@ -27,7 +27,7 @@ conn = pymysql.connect(
 s3_resource = boto3.resource('s3', aws_access_key_id = access_key, aws_secret_access_key = secret_key)
 
 # S3 객체 이름 설정
-VIDEO_NAME = '캐논 파워샷 G7 X Mark II 안정환의 파워무비!'
+VIDEO_NAME = '2022 이화여대 남성교수중창단 입학식 공연 비하인드'
 object_name = 'video/' + VIDEO_NAME + '.mp4'
 
 # S3 객체 가져오기
@@ -44,7 +44,7 @@ with open('my-local-video.mp4', 'wb') as f:
 VIDEO_PATH = 'my-local-video.mp4'
 video = open_video(VIDEO_PATH)
 
-# 디텍터 생성, 임계값 30, 장면 당 최소 5초
+# detector 생성, 임계값 27, 장면 당 최소 5초
 fps = cv2.VideoCapture(VIDEO_PATH).get(cv2.CAP_PROP_FPS)
 content_detector = ContentDetector(threshold=27, min_scene_len=fps*5)
 
@@ -52,15 +52,20 @@ content_detector = ContentDetector(threshold=27, min_scene_len=fps*5)
 scene_manager = SceneManager()
 scene_manager.add_detector(content_detector)
 
-# 디텍트 수행
+# detect 수행 (영상의 처음부터 끝까지 detect)
 scene_manager.detect_scenes(video, show_progress=True)
+
+# `get_scene_list` 리스트의 시작과 끝 timecode pairs 을 리턴
 scene_list = scene_manager.get_scene_list()
 
 # 장면 분할 결과 출력
 sceneTime = [] #장면 시작하는 시간을 저장하는 리스트
 for scene in scene_list:
   start, end = scene
-  sceneTime.append(start.get_seconds())
+  if start.get_seconds()== 0:
+    sceneTime.append(round(start.get_seconds(), 4))
+  else:
+    sceneTime.append(round(start.get_seconds(), 4)-0.3)
 
 # 썸네일 만들기 (jpg 파일로 저장)
 save_images(
@@ -82,7 +87,7 @@ for i in range(len(sceneTime)):
 
 focusSceneAll = [] # 모든 리뷰어의 장면별 시간, 해당 집중도를 저장하는 리스트
 emotionSceneAll = [] # 모든 리뷰어의 장면별 시간, 해당 장면에서 느낀 감정, 감정 비율을 저장하는 리스트
-videoId = 3 # 리뷰가 완료된 비디오의 id
+videoId = 5 # 리뷰가 완료된 비디오의 id
 
 sql = "SELECT * FROM seetube.watchingInfos WHERE videoId = {}".format(videoId)
 
@@ -157,7 +162,8 @@ with conn:
         focus_result = [] 
         for key in focus_dict:
             avg = sum(focus_dict[key]) / len(focus_dict[key])
-            focus_result.append([key[0], key[1], avg])
+            if(avg > 0.7):
+                focus_result.append([key[0], key[1], avg])
 
 
         # 감정 상태 8가지로 분류
@@ -167,9 +173,10 @@ with conn:
 
         # 리뷰어가 해당 장면에서 가장 많이 느낀 감정을 리스트로 저장
         for lst in emotionSceneAll:
-            count_dict = {t: lst[3].count(t) for t in target_list} 
+            count_dict = {t: sum(sublist.count(t) for sublist in lst[3]) for t in target_list} 
             max_count = max(count_dict.values())
-            max_word = [t for t, c in count_dict.items() if c == max_count][0]
+            max_words = [t for t, c in count_dict.items() if c == max_count]
+            max_word = max_words[0] if max_words and max_words[0] != 'neutral' else 'neutral'
             emotion_list.append([lst[0], lst[1], lst[2], max_word])
 
         # 감정 리스트를 딕셔너리로 변환
@@ -182,22 +189,36 @@ with conn:
                 emotion_dict[key] = [sub_lst[3]]
 
 
-           
-
-        # 해당 장면 구간에서 가장 많이 느껴진 감정, 감정률을 계산하여 감정 결과 리스트에 저장
-        emotion_result = [] 
-        for key, value in emotion_dict.items():
-            counter = Counter(value)
-            most_common_word, most_common_count = counter.most_common(1)[0]
-            emotion_result.append((key[0], key[1], most_common_word, most_common_count / len(value)))
         
-        # 감정 상태가 중립인 것을 제외       
-        # emotion_result = [r for r in emotion_result if r[2] != 'neutral']
+        ranked_scenes_with_ratios = []
+
+        # 각 장면마다 가장 많이 감지된 감정 계산
+        for scene, emotions in emotion_dict.items():
+            emotion_count = {}
+
+            # 감정별 인원수 계산
+            for emotion in emotions:
+                if emotion in emotion_count:
+                    emotion_count[emotion] += 1
+                else:
+                    emotion_count[emotion] = 1
+
+            # 가장 많이 감지된 감정 찾기
+            major_emotion = max(emotion_count, key=emotion_count.get)
+            
+            # 가장 많이 감지된 감정의 비율 계산
+            total_count = sum(emotion_count.values())
+            major_emotion_ratio = emotion_count[major_emotion] / total_count
+
+            # 리스트에 저장
+            if (major_emotion_ratio > 0.5):
+                ranked_scenes_with_ratios.append([scene[0], scene[1], major_emotion, major_emotion_ratio])
+
 
         
         
         #DB에 결과값 INSERT
-        for res in emotion_result:
+        for res in ranked_scenes_with_ratios:
             int_time = int(res[0])
             s3_thumbnail_path = 'thumbnails/' + VIDEO_NAME +'-' + str(int_time) + '.jpg'
             thumbnail_url = f"https://{bucket_name}.s3.ap-northeast-2.amazonaws.com/{s3_thumbnail_path}"

@@ -13,7 +13,7 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 2. 집중도가 높았던 장면, 감정이 감지된 장면
 
-![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/ff8edf98-585b-461b-8af6-defc34f3670d)
+
 
 **집중도가 높았던 장면**
 

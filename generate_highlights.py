@@ -1,9 +1,10 @@
 import pymysql
 import json
 import boto3
-from moviepy.editor import VideoFileClip, concatenate_videoclips
+from moviepy.editor import *
 import os
 import subprocess
+
 
 # s3연결
 access_key = ''
@@ -23,8 +24,8 @@ conn = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor)
 
 VIDEO_PATH = 'my-local-video.mp4'
-VIDEO_NAME = '캐논 파워샷 G7 X Mark II 안정환의 파워무비!'
-videoId = 3
+VIDEO_NAME = '2022 이화여대 남성교수중창단 입학식 공연 비하인드'
+videoId = 5
 
 with conn.cursor() as cur:
     # 비디오 테이블에서 중요 감정 가져오기
@@ -41,19 +42,26 @@ with conn.cursor() as cur:
 
     # focus 정보를 이용하여 scene 정보를 추출하는 함수
     def extract_scene(focus):
-    # focusRate와 emotionRate를 각각 0.5 비율로 환산한 후 합산
         focus_rate = focus["focusRate"] or 0
         emotion_rate = focus["emotionRate"] or 0
-        scene_score = focus_rate * 0.5 + emotion_rate * 0.5
-    # importantEmotion과 emotion이 같으면 1.5배 가중치를 곱함
+
+        # importantEmotion과 emotion이 같으면 1.5배 가중치를 곱함
         if focus['emotion'] == importantEmotion:
-            scene_score *= 1.5
-    # scene 정보를 딕셔너리로 저장하여 scene_list에 추가
-        highlight_list.append({'startTime': focus['focusStartTime'], 'endTime': focus['focusEndTime'], 'sceneScore': scene_score})
+            emotion_rate *= 1.5
+
+        # scene_score를 계산
+        scene_score = (focus_rate * 0.5 + emotion_rate * 0.5) 
+
+        return scene_score
+   
+    
+   
 
     # focus 정보를 이용하여 scene 정보 추출
     for focus in result:
-        extract_scene(focus)
+        scene_score = extract_scene(focus)
+         # scene 정보를 딕셔너리로 저장하여 scene_list에 추가
+        highlight_list.append({'startTime': focus['focusStartTime'], 'endTime': focus['focusEndTime'], 'focusRate': focus['focusRate'], 'emotionRate': focus['emotionRate'], 'emotion': focus['emotion'], 'sceneScore': scene_score})
 
 
     merged_scenes = []
@@ -62,25 +70,45 @@ with conn.cursor() as cur:
         if i == 0:
             end_time = scene['endTime']
         else:
-            end_time = scene['endTime'] - highlight_list[i-1]['endTime'] + end_time
-    
-        merged_scenes.append({'startTime': start_time, 'endTime': end_time})
+            end_time = scene['endTime'] - highlight_list[i-1]['startTime'] + end_time
+        
+        merged_scenes.append({'startTime': round(start_time, 4) , 'endTime': round(end_time, 4)})
         start_time = end_time
 
+     
 
-    # 상위 5개 영상 하이라이트로 재편집
-    for i, scene in enumerate(highlight_list[:5]):
+    # sceneScore를 기준으로 내림차순 정렬
+    highlight_list.sort(key=lambda x: x['sceneScore'], reverse=True)
+
+    # 상위 5개 영상 뽑아내기
+    top_5_scenes = highlight_list[:5]
+
+    # 시작시간을 기준으로 오름차순 정렬
+    top_5_scenes.sort(key=lambda x: x['startTime'])
+
+    # 상위 5개 영상 뽑아내기
+    for i, scene in enumerate(top_5_scenes):
             start_time = scene['startTime']
             end_time = scene['endTime']
             output_name = f'scene{i+1}.mp4'
             cmd = f'ffmpeg -i {VIDEO_PATH} -ss {start_time} -t {end_time - start_time} -b:v 3500k -c:v libx264 {output_name}'
             os.system(cmd)
-            
 
-    # s3에 하이라이트 영상 업로드
-    input_files = "|".join([f"scene{i+1}.mp4" for i in range(5)])
-    cmd = f'ffmpeg -i "concat:{input_files}" -c copy highlight_{videoId}.mp4'
-    os.system(cmd)
+   
+   # 영상들을 리스트로 저장
+    clips = []
+    for i in range(1, 6):
+        clip = VideoFileClip(f"scene{i}.mp4")
+        clips.append(clip)
+
+    # 영상들을 리스트로 묶어서 concatenate_videoclips 함수를 이용하여 합칩니다.
+    final_clip = concatenate_videoclips(clips)
+
+    # 합쳐진 영상 파일을 저장합니다.
+    final_clip.write_videofile(f"highlight_{videoId}.mp4",
+                                audio_codec='aac',
+                                temp_audiofile='temp-audio.m4a', 
+                                remove_temp=True)
 
     file_name = f'highlight_{videoId}.mp4'
     s3_video_path = 'highlight/' + file_name
@@ -89,6 +117,7 @@ with conn.cursor() as cur:
     s3_client.upload_file(file_name, bucket_name, s3_video_path, ExtraArgs={'ACL': 'public-read'})
 
     thumbnail_url = []
+
     # 하이라이트 썸네일 가져오기
     for i in range(5):
         int_time = int(highlight_list[i]['startTime'])
@@ -105,59 +134,89 @@ with conn.cursor() as cur:
                 FirstSceneEndTimeInOriginalVideo,
                 FirstSceneStartTimeInHighlight,
                 FirstSceneEndTimeInHighlight,
-                FirstSceneThumbnail,
+                thumbnailURLInFirstScene,
+                focusRateInFirstScene,
+                emotionRateInFirstScene,
+                emotionInFirstScene,
                 SecondSceneStartTimeInOriginalVideo,
                 SecondSceneEndTimeInOriginalVideo,
                 SecondSceneStartTimeInHighlight,
                 SecondSceneEndTimeInHighlight,
-                SecondSceneThumbnail,
+                thumbnailURLInSecondScene,
+                focusRateInSecondScene,
+                emotionRateInSecondScene,
+                emotionInSecondScene,
                 ThirdSceneStartTimeInOriginalVideo,
                 ThirdSceneEndTimeInOriginalVideo,
                 ThirdSceneStartTimeInHighlight,
                 ThirdSceneEndTimeInHighlight,
-                ThirdSceneThumbnail,
+                thumbnailURLInThirdScene,
+                focusRateInThirdScene,
+                emotionRateInThirdScene,
+                emotionInThirdScene,
                 FourthSceneStartTimeInOriginalVideo,
                 FourthSceneEndTimeInOriginalVideo,
                 FourthSceneStartTimeInHighlight,
                 FourthSceneEndTimeInHighlight,
-                FourthSceneThumbnail,
+                thumbnailURLInFourthScene,
+                focusRateInFourthScene,
+                emotionRateInFourthScene,
+                emotionInFourthScene,
                 FifthSceneStartTimeInOriginalVideo,
                 FifthSceneEndTimeInOriginalVideo,
                 FifthSceneStartTimeInHighlight,
                 FifthSceneEndTimeInHighlight,
-                FifthSceneThumbnail,
+                thumbnailURLInFifthScene,
+                focusRateInFifthScene,
+                emotionRateInFifthScene,
+                emotionInFifthScene,
                 videoURL,
                 videoId
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
     
     values = (
-        highlight_list[0]['startTime'],
-        highlight_list[0]['endTime'],
+        top_5_scenes[0]['startTime'],
+        top_5_scenes[0]['endTime'],
         merged_scenes[0]['startTime'],
         merged_scenes[0]['endTime'],
         thumbnail_url[0],
-        highlight_list[1]['startTime'],
-        highlight_list[1]['endTime'],
+        top_5_scenes[0]['focusRate'],
+        top_5_scenes[0]['emotionRate'],
+        top_5_scenes[0]['emotion'],
+        top_5_scenes[1]['startTime'],
+        top_5_scenes[1]['endTime'],
         merged_scenes[1]['startTime'],
         merged_scenes[1]['endTime'],
         thumbnail_url[1],
-        highlight_list[2]['startTime'],
-        highlight_list[2]['endTime'],
+        top_5_scenes[1]['focusRate'],
+        top_5_scenes[1]['emotionRate'],
+        top_5_scenes[1]['emotion'],
+        top_5_scenes[2]['startTime'],
+        top_5_scenes[2]['endTime'],
         merged_scenes[2]['startTime'],
         merged_scenes[2]['endTime'],
         thumbnail_url[2],
-        highlight_list[3]['startTime'],
-        highlight_list[3]['endTime'],
+        top_5_scenes[2]['focusRate'],
+        top_5_scenes[2]['emotionRate'],
+        top_5_scenes[2]['emotion'],
+        top_5_scenes[3]['startTime'],
+        top_5_scenes[3]['endTime'],
         merged_scenes[3]['startTime'],
         merged_scenes[3]['endTime'],
         thumbnail_url[3],
-        highlight_list[4]['startTime'],
-        highlight_list[4]['endTime'],
+        top_5_scenes[3]['focusRate'],
+        top_5_scenes[3]['emotionRate'],
+        top_5_scenes[3]['emotion'],
+        top_5_scenes[4]['startTime'],
+        top_5_scenes[4]['endTime'],
         merged_scenes[4]['startTime'],
         merged_scenes[4]['endTime'],
         thumbnail_url[4],
+        top_5_scenes[4]['focusRate'],
+        top_5_scenes[4]['emotionRate'],
+        top_5_scenes[4]['emotion'],
         video_url,
         videoId
     )

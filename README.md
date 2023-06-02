@@ -42,7 +42,7 @@ Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5.git
 
 - 쇼츠 선정
 
-<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png" height="30%" width="30%">
+<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png" height="20%" width="20%">
 
 OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 

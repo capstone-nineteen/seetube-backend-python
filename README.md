@@ -42,7 +42,7 @@ modified Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5
 
 OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 
-<img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/8fead283-baba-4551-9508-1f8133252c66" width = 30% height = 30%>
+<img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/8fead283-baba-4551-9508-1f8133252c66" width = 70% height = 70%>
 
 
 
@@ -55,7 +55,7 @@ generate_highlights.py
 
 ffmpeg, moviepy 라이브러리 사용. 
 
-<img src="https://velog.velcdn.com/images/sangbooom/post/35a7bad1-637f-47bb-9bfd-6fab7532d0db/image.jpeg" width="30%" height="30%">
+<img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/3aa25028-a9ae-4d8f-91b9-598659445160" width="70%" height="70%">
 
 ffmpeg: https://github.com/kkroening/ffmpeg-python
 

@@ -62,6 +62,7 @@ ffmpeg, moviepy 라이브러리 사용.
 <img src="https://velog.velcdn.com/images/sangbooom/post/35a7bad1-637f-47bb-9bfd-6fab7532d0db/image.jpeg" width="30%" height="30%">
 
 ffmpeg: https://github.com/kkroening/ffmpeg-python
+
 moviepy : https://github.com/kkroening/ffmpeg-python
 
 

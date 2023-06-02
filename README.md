@@ -36,7 +36,7 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 가장 많은 시선을 포함하는 클러스터의 바운딩 박스 계산하고 '시선이 가장 집중된 구역'으로 선정
 이후 시선 집중 구역과 객체의 바운딩 박스의 교차 정도 계산, 가장 많이 교차하는 객체를 씬스틸러로 선정
 
-modified Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5.git
+Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5.git
 
 ##### 쇼츠 생성
 

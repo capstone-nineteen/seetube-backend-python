@@ -69,7 +69,7 @@ moviepy : https://github.com/kkroening/ffmpeg-python
 
 
 
-# ✂ 영상 분석 결과 화면
+# ✂ 영상 분석 결과 
 
 ##### 집중도& 감정이 감지된 장면
 https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/d6f8b052-df0b-4ad6-b330-d6946ad1f756

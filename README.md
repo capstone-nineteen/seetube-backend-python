@@ -28,8 +28,8 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 #### 씬스틸러 선정, 쇼츠 생성
 
-<img src="https://assets.website-files.com/5f6bc60e665f54db361e52a9/5f6bc60e665f546a6b1e5400_logo_yolo.png" height="200px" width="300px">
-<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png", height="200px" width="300px>
+<img src="https://assets.website-files.com/5f6bc60e665f54db361e52a9/5f6bc60e665f546a6b1e5400_logo_yolo.png">
+<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png">
 
 
 - 씬스틸러 선정

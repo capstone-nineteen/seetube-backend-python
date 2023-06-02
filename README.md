@@ -1,6 +1,6 @@
 # seetube-backend-python
 
-1. 장면 분할
+### 장면 분할
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/429481eb-cb64-4602-a87a-8b37a95bafa4)
 
@@ -11,7 +11,7 @@ Scene Transition Detection 라이브러리 PySceneDetect 사용
 
 PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
-2. 집중도가 높았던 장면, 감정이 감지된 장면
+### 집중도가 높았던 장면, 감정이 감지된 장면
 
 
 
@@ -24,7 +24,7 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 장면별로 많은 사람들이 공통으로 느낀 감정과 그 비율 계산, 감정 감지율이 20%이상인 장면 선정
 
-3. 씬스틸러 선정
+### 씬스틸러 선정
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/4db0ea84-b063-40b4-925e-83e2484179a7)
 
@@ -36,7 +36,7 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 Yolov5 : https://github.com/ultralytics/yolov5
 
-4. 하이라이트
+### 하이라이트
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/da6afba8-d589-4812-93db-14ca44f7ec47)
 
@@ -49,7 +49,7 @@ ffmpeg, moviepy 라이브러리 사용.
 ffmpeg: https://github.com/kkroening/ffmpeg-python
 moviepy : https://github.com/kkroening/ffmpeg-python
 
-5. 쇼츠
+### 쇼츠
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/abd98b5b-a8a9-4f73-99a6-1bfc930b6634)
 

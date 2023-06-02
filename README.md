@@ -68,7 +68,33 @@ moviepy : https://github.com/kkroening/ffmpeg-python
 
 
 
-# 영산 분석 결과 화면
+# 영상 분석 결과 화면
+
+##### 집중도& 감정이 감지된 장면
+https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/d6f8b052-df0b-4ad6-b330-d6946ad1f756
+
+##### 신스틸러
+https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/a841a4e8-68f4-4a63-96a4-d034a6169615
+
+##### 쇼츠
+https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/9a7094c8-0734-48d4-bc79-8bda3257e02b
+
+##### 하이라이트
+https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/4a120b45-0c15-4886-b430-4d080a8ea6ed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

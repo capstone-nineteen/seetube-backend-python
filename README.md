@@ -2,7 +2,7 @@
 
 
 #### 1. 장면 분할
-scene_division.py
+
 
 <img src = "https://raw.githubusercontent.com/Breakthrough/PySceneDetect/master/docs/img/pyscenedetect_logo_small.png" height="30%" width="30%">
 
@@ -15,7 +15,7 @@ Scene Transition Detection 라이브러리 PySceneDetect 사용
 PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 #### 2. 집중도가 높았던 장면, 감정이 감지된 장면
-generate_focus_emotion.py
+
 
 
 ##### 집중도가 높았던 장면
@@ -28,7 +28,7 @@ generate_focus_emotion.py
 장면별로 많은 사람들이 공통으로 느낀 감정과 그 비율 계산, 감정 감지율이 20%이상인 장면 선정
 
 #### 3. 씬스틸러 선정, 쇼츠 생성
-sceneStealer_advanced.py
+
 
 ##### 씬스틸러
 
@@ -49,7 +49,7 @@ OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 
 
 #### 4. 하이라이트 생성
-generate_highlights.py
+
 
 
 장면별 집중률과 감정 감지율 점수화, 영상 장르와 일치하는 감정 점수에는 가중치 부여

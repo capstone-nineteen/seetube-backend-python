@@ -57,12 +57,13 @@ generate_highlights.py
 
 ffmpeg, moviepy 라이브러리 사용. 
 
-<img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/3aa25028-a9ae-4d8f-91b9-598659445160" width="70%" height="70%">
-
-
 ffmpeg: https://github.com/kkroening/ffmpeg-python
 
 moviepy : https://github.com/kkroening/ffmpeg-python
+
+
+
+<img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/3aa25028-a9ae-4d8f-91b9-598659445160" width="70%" height="70%">
 
 
 

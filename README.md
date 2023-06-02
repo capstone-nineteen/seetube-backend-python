@@ -2,7 +2,7 @@
 시선 데이터, 표정 데이터 분석 및 영상 처리 알고리즘
 
 #### 장면 분할
-
+scene_division.py
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/429481eb-cb64-4602-a87a-8b37a95bafa4)
 
@@ -17,30 +17,35 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 
 
-**집중도가 높았던 장면**
+- 집중도가 높았던 장면
 
 시선 (x, y) 좌표와 동공 고정 여부 (Fixation/Saccade) 고려 영상 내부의 한 응시점에 동공이 고정된 경우 집중으로 판단 
 장면별 집중률 계산, 평균 집중률이 70%이상인 장면 선정
 
-**감정이 감지된 장면**
+- 감정이 감지된 장면
 
 장면별로 많은 사람들이 공통으로 느낀 감정과 그 비율 계산, 감정 감지율이 20%이상인 장면 선정
 
-### 씬스틸러 선정, 쇼츠 생성
+#### 씬스틸러 선정, 쇼츠 생성
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/4db0ea84-b063-40b4-925e-83e2484179a7)
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/abd98b5b-a8a9-4f73-99a6-1bfc930b6634)
 
+- 씬스틸러 선정
 
 딥러닝 기반 객체 탐지 모델, YOLOv5사용. 선정된 장면 영상에서 객체 데이터 수집
 매 프레임마다 등장하는 객체들의 바운딩 박스 좌표 저장. 시선 클러스터링에는 DBSCAN 알고리즘 사용. 다량의 시선 데이터를 밀도 기반으로 클러스터링
 가장 많은 시선을 포함하는 클러스터의 바운딩 박스 계산하고 '시선이 가장 집중된 구역'으로 선정
 이후 시선 집중 구역과 객체의 바운딩 박스의 교차 정도 계산, 가장 많이 교차하는 객체를 씬스틸러로 선정
+
+- 쇼츠 선정
+
 씬스틸러를 중심으로 9:16의 비율로 영상 화면 잘라 쇼츠 생성
+OpenCV
 
 Yolov5 : https://github.com/ultralytics/yolov5
 
-### 하이라이트
+#### 하이라이트 생성
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/da6afba8-d589-4812-93db-14ca44f7ec47)
 

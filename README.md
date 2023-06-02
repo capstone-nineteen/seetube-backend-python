@@ -28,12 +28,10 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 #### 씬스틸러 선정, 쇼츠 생성
 
-<img src = "https://assets.website-files.com/5f6bc60e665f54db361e52a9/5f6bc60e665f546a6b1e5400_logo_yolo.png" height="30%" width="30%">
-
-<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png" height="30%" width="30%">
-
 
 - 씬스틸러 선정
+
+<img src = "https://assets.website-files.com/5f6bc60e665f54db361e52a9/5f6bc60e665f546a6b1e5400_logo_yolo.png" height="30%" width="30%">
 
 딥러닝 기반 객체 탐지 모델, YOLOv5사용. 선정된 장면 영상에서 객체 데이터 수집
 매 프레임마다 등장하는 객체들의 바운딩 박스 좌표 저장. 시선 클러스터링에는 DBSCAN 알고리즘 사용. 다량의 시선 데이터를 밀도 기반으로 클러스터링
@@ -44,8 +42,10 @@ Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5.git
 
 - 쇼츠 선정
 
-씬스틸러를 중심으로 9:16의 비율로 영상 화면 잘라 쇼츠 생성
-OpenCV
+<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png" height="30%" width="30%">
+
+OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
+
 
 
 

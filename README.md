@@ -14,7 +14,7 @@ Scene Transition Detection 라이브러리 PySceneDetect 사용
 PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 #### 2. 집중도가 높았던 장면, 감정이 감지된 장면
-
+generate_focus_emotion.py
 
 
 - 집중도가 높았던 장면
@@ -50,15 +50,15 @@ OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 
 
 #### 4. 하이라이트 생성
-generate_highlight.py
-
-![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/da6afba8-d589-4812-93db-14ca44f7ec47)
+generate_highlights.py
 
 
 장면별 집중률과 감정 감지율 점수화, 영상 장르와 일치하는 감정 점수에는 가중치 부여
 모든 장면을 중요도 점수를 기준으로 정렬하고 상위 5개의 장면을 합쳐 하이라이트 영상으로 재편집.
 
 ffmpeg, moviepy 라이브러리 사용. 
+
+<img src="https://velog.velcdn.com/images/sangbooom/post/35a7bad1-637f-47bb-9bfd-6fab7532d0db/image.jpeg" width="30%" height="30%">
 
 ffmpeg: https://github.com/kkroening/ffmpeg-python
 moviepy : https://github.com/kkroening/ffmpeg-python

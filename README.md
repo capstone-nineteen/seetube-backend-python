@@ -18,12 +18,12 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 generate_focus_emotion.py
 
 
-- 집중도가 높았던 장면
+##### 집중도가 높았던 장면
 
 시선 (x, y) 좌표와 동공 고정 여부 (Fixation/Saccade) 고려 영상 내부의 한 응시점에 동공이 고정된 경우 집중으로 판단 
 장면별 집중률 계산, 평균 집중률이 70%이상인 장면 선정
 
-- 감정이 감지된 장면
+##### 감정이 감지된 장면
 
 장면별로 많은 사람들이 공통으로 느낀 감정과 그 비율 계산, 감정 감지율이 20%이상인 장면 선정
 
@@ -42,6 +42,8 @@ modified Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5
 
 OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 
+
+
 <img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/8fead283-baba-4551-9508-1f8133252c66" width = 70% height = 70%>
 
 
@@ -57,9 +59,11 @@ ffmpeg, moviepy 라이브러리 사용.
 
 <img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/3aa25028-a9ae-4d8f-91b9-598659445160" width="70%" height="70%">
 
+
 ffmpeg: https://github.com/kkroening/ffmpeg-python
 
 moviepy : https://github.com/kkroening/ffmpeg-python
+
 
 
 

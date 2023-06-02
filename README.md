@@ -4,7 +4,8 @@
 #### 1. 장면 분할
 scene_division.py
 
-![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/429481eb-cb64-4602-a87a-8b37a95bafa4)
+<img src = "https://raw.githubusercontent.com/Breakthrough/PySceneDetect/master/docs/img/pyscenedetect_logo_small.png" height="20%" width="20%">
+
 
 
 Scene Transition Detection 라이브러리 PySceneDetect 사용

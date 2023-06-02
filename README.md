@@ -32,9 +32,6 @@ sceneStealer_advanced.py
 
 - 씬스틸러 선정
 
-<img src = "https://assets.website-files.com/5f6bc60e665f54db361e52a9/5f6bc60e665f546a6b1e5400_logo_yolo.png" height="30%" width="30%">
-
-딥러닝 기반 객체 탐지 모델, YOLOv5사용. 선정된 장면 영상에서 객체 데이터 수집
 매 프레임마다 등장하는 객체들의 바운딩 박스 좌표 저장. 시선 클러스터링에는 DBSCAN 알고리즘 사용. 다량의 시선 데이터를 밀도 기반으로 클러스터링
 가장 많은 시선을 포함하는 클러스터의 바운딩 박스 계산하고 '시선이 가장 집중된 구역'으로 선정
 이후 시선 집중 구역과 객체의 바운딩 박스의 교차 정도 계산, 가장 많이 교차하는 객체를 씬스틸러로 선정
@@ -43,10 +40,9 @@ modified Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5
 
 - 씬스틸러 기반 쇼츠 생성
 
-<img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png" height="20%" width="20%">
-
 OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 
+<img src="https://github.com/capstone-nineteen/seetube-backend-python/assets/65602906/8fead283-baba-4551-9508-1f8133252c66" width = 30% height = 30%>
 
 
 

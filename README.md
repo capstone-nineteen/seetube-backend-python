@@ -40,7 +40,7 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5.git
 
-- 쇼츠 선정
+- 씬스틸러 기반 쇼츠 생성
 
 <img src="https://blog.kakaocdn.net/dn/uvneX/btqC4tkVgbD/jmfu1Z5MKiK0w45DPU2vwK/img.png" height="20%" width="20%">
 

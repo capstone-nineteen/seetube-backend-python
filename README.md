@@ -1,5 +1,5 @@
-# seetube-backend-python
-시선 데이터, 표정 데이터 분석 및 영상 처리 알고리즘
+# Seetube의 영상 분석 알고리즘
+
 
 #### 1. 장면 분할
 scene_division.py

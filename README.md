@@ -1,6 +1,8 @@
 # seetube-backend-python
+시선 데이터, 표정 데이터 분석 및 영상 처리 알고리즘
 
-### 장면 분할
+#### 장면 분할
+
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/429481eb-cb64-4602-a87a-8b37a95bafa4)
 
@@ -11,7 +13,7 @@ Scene Transition Detection 라이브러리 PySceneDetect 사용
 
 PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
-### 집중도가 높았던 장면, 감정이 감지된 장면
+#### 집중도가 높았던 장면, 감정이 감지된 장면
 
 
 
@@ -24,15 +26,17 @@ PySceneDetect : https://github.com/Breakthrough/PySceneDetect
 
 장면별로 많은 사람들이 공통으로 느낀 감정과 그 비율 계산, 감정 감지율이 20%이상인 장면 선정
 
-### 씬스틸러 선정
+### 씬스틸러 선정, 쇼츠 생성
 
 ![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/4db0ea84-b063-40b4-925e-83e2484179a7)
+![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/abd98b5b-a8a9-4f73-99a6-1bfc930b6634)
 
 
 딥러닝 기반 객체 탐지 모델, YOLOv5사용. 선정된 장면 영상에서 객체 데이터 수집
 매 프레임마다 등장하는 객체들의 바운딩 박스 좌표 저장. 시선 클러스터링에는 DBSCAN 알고리즘 사용. 다량의 시선 데이터를 밀도 기반으로 클러스터링
 가장 많은 시선을 포함하는 클러스터의 바운딩 박스 계산하고 '시선이 가장 집중된 구역'으로 선정
 이후 시선 집중 구역과 객체의 바운딩 박스의 교차 정도 계산, 가장 많이 교차하는 객체를 씬스틸러로 선정
+씬스틸러를 중심으로 9:16의 비율로 영상 화면 잘라 쇼츠 생성
 
 Yolov5 : https://github.com/ultralytics/yolov5
 
@@ -49,11 +53,8 @@ ffmpeg, moviepy 라이브러리 사용.
 ffmpeg: https://github.com/kkroening/ffmpeg-python
 moviepy : https://github.com/kkroening/ffmpeg-python
 
-### 쇼츠
 
-![image](https://github.com/capstone-nineteen/seetube-backend-python/assets/71063214/abd98b5b-a8a9-4f73-99a6-1bfc930b6634)
 
-씬스틸러 선정 결과 활용. 클립 영상에서 씬스틸러를 확대하여 16:9 비율로 크롭
 
 
 

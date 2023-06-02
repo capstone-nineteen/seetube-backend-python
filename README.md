@@ -4,7 +4,7 @@
 #### 1. 장면 분할
 scene_division.py
 
-<img src = "https://raw.githubusercontent.com/Breakthrough/PySceneDetect/master/docs/img/pyscenedetect_logo_small.png" height="20%" width="20%">
+<img src = "https://raw.githubusercontent.com/Breakthrough/PySceneDetect/master/docs/img/pyscenedetect_logo_small.png" height="30%" width="30%">
 
 
 
@@ -30,7 +30,7 @@ generate_focus_emotion.py
 #### 3. 씬스틸러 선정, 쇼츠 생성
 sceneStealer_advanced.py
 
-- 씬스틸러 선정
+##### 씬스틸러
 
 매 프레임마다 등장하는 객체들의 바운딩 박스 좌표 저장. 시선 클러스터링에는 DBSCAN 알고리즘 사용. 다량의 시선 데이터를 밀도 기반으로 클러스터링
 가장 많은 시선을 포함하는 클러스터의 바운딩 박스 계산하고 '시선이 가장 집중된 구역'으로 선정
@@ -38,7 +38,7 @@ sceneStealer_advanced.py
 
 modified Yolov5 : https://github.com/capstone-nineteen/seeyoutube-backend-yolov5.git
 
-- 씬스틸러 기반 쇼츠 생성
+##### 쇼츠 생성
 
 OpenCV를 사용하여 씬스틸러를 확대한 9:16비의 쇼츠 영상 생성
 
